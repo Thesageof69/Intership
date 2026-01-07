@@ -9,7 +9,8 @@
     <body>
       <h1> User Authentication</h1>
       <h2> Register page</h2>
-      <form id="/register" method="post">
+      <form id="register">
+
         <label for="reg-FirstName" >FirstName</label>
         <input type="text" id="reg-FirstName" name="FirstName" required><br><br>
         <label for="reg-LastName" >LastName</label>
@@ -20,15 +21,101 @@
         <input type="password" id="reg-Password" name="Password" required><br><br>
 
         <btn type = "Submit">Register</btn>
-        >Login page</h1>
-      <form action="/login" method="post"></form>
-        <label for="Email" >Email</label> 
-        <input type="email" id="Email" name="Email" required><br><br>
-        <label for="Password" >Password</label>
-        <input type="password" id="Password" name="Password" required><br><br>
-
-        <input type="submit" value="Login">
       </form>
+      <h2>Login page</h2>
+      <form id="Login" >
+
+        <input type="email" id="login-email" name="Email" required><br><br>
+    
+        <input type="password" id="login-password" name="Password" required><br><br>
+        
+        <btn type="submit" >Login</btn>
+      </form>
+
+      <btn id = "btn-profile">Get Profile</btn>
+      <btn id = "btn-users">Get Users</btn>
+
+      <pre id ="result"></pre>
+
+      <script>
+        const resultBox = document.getElementById('result');
+
+        function showResult(data){
+          resultBox.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        }
+
+        async function jsonRequest(url , method = 'GET',bodyObj){
+          const options = {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+              Credentials: 'include'
+            }
+            };
+
+          if(bodyObj)
+            options.body = JSON.stringify(bodyObj);
+          
+
+          const res = await fetch (url, options);
+          let data;
+          try{
+            data = await res.json();
+          } catch {data = await res.text();}
+          if(!res.ok){
+            throw new Error (typeof data === 'string' ? data : JSON.stringify(data));
+            return data;
+          }
+          document.getElementById('register').addEventListener('submit', async (e) =>{
+            e.preventDefault();
+            const body ={
+             firstName : document.getElementById('reg-FirstName').value,
+             lastName : document.getElementById('reg-LastName').value,
+             email : document.getElementById('reg-Email').value,
+             password : document.getElementById('reg-Password').value,
+            };
+
+            try{
+              const data = await jsonRequest('/register', 'POST', body);
+              showResult(data);
+            } catch (err){
+              showResult('ERROR :' + err.message);
+            }
+          });
+          document.getElementById('Login').addEventListener('submit', async(e) =>{
+            e.preventDefault();
+            const body = {
+              Email : document.getElementById('login-email').value,
+              Password : document.getElementById('login-password').value,
+            };
+
+            try{
+              const data = await jsonRequest('/login', 'POST', body);
+              showResult(data);
+            } catch (err){
+              showResult('ERROR :' + err.message);
+            }
+          });
+          document.getElementById('btn-profile').addEventListener('click', async () =>{
+            try{
+              const data = await jsonRequest('/profile', 'GET');
+              showResult(data);
+            } catch (err){
+              showResult( 'ERROR :' + err.message);
+            }
+          });
+
+          document.getElementById('btn-users').addEventListener('click', async () =>{
+            try{
+              const data = await jsonRequest('/users', 'GET');
+              showResult(data);
+            } catch (err){
+              showResult( 'ERROR :' + err.message);
+            }
+          });
+          return data;
+        }
+      </script>
 
       
     </body>
