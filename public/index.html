@@ -18,6 +18,7 @@
 
   <h2>Register</h2>
   <form id="register">
+
     <label for="reg-FirstName">FirstName</label>
     <input type="text" id="reg-FirstName" name="FirstName" required><br><br>
 
@@ -31,13 +32,17 @@
     <input type="password" id="reg-Password" name="Password" required><br><br>
 
     <button type="submit">Register</button>
+
   </form>
 
   <h2>Login</h2>
   <form id="Login">
+
     <input type="email" id="login-email" name="Email" required><br><br>
     <input type="password" id="login-password" name="Password" required><br><br>
+
     <button type="submit">Login</button>
+
   </form>
 
   <button id="btn-profile" type="button">Get Profile</button>
@@ -63,8 +68,11 @@
       if (bodyObj) options.body = JSON.stringify(bodyObj);
       const res = await fetch(url, options);
       let data;
-      try { data = await res.json(); } catch { data = await res.text(); }
-      if (!res.ok) throw new Error(typeof data === 'string' ? data : JSON.stringify(data));
+      try {
+         data = await res.json();
+         } catch { data = await res.text(); }
+      if (!res.ok) 
+      throw new Error(typeof data === 'string' ? data : JSON.stringify(data));
       return data;
     }
 
