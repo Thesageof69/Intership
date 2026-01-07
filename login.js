@@ -12,12 +12,15 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const csvPath = path.join(__dirname, 'users.csv');
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
+
 
 function appendUserToCSV(user) {
   const line = `\n${user._id},${user.FirstName},${user.LastName},${user.Email}`;
@@ -51,10 +54,6 @@ function postAuth(req, res, next) {
   console.log("Post-auth");
   next();
 }
-
-app.get('/', (req, res) => {
-  res.send('<h1>Server is working</h1>');
-});
 
 app.post('/register', async (req, res) => {
   try {
