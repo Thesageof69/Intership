@@ -103,8 +103,8 @@ Update current user's profile
 Create a `.env` file in the root directory with:
 
 ```
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+MONGODB_URI= mongodb_connection_string
+JWT_SECRET=jwt_secret_key
 PORT=3000
 ```
 
