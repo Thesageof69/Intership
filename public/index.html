@@ -2,53 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login Page</title>
+  <title>User Authentication</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    form { margin-bottom: 20px; }
-    label { display: inline-block; width: 100px; }
-    input { padding: 5px; margin-bottom: 10px; }
-    button { padding: 10px 15px; background-color: #28a745; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #218838; }
-    pre { background-color: #f8f9fa; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f2f5;
+    }
+
+    .auth-container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .forms-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .form-card {
+      flex: 1 1 280px;
+      min-width: 260px;
+    }
+
+    .form-card h2 {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #ddd;
+      max-height: 250px;
+      overflow: auto;
+      font-size: 13px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <h1>User Authentication</h1>
+  <div class="auth-container">
+    <h1>User Authentication</h1>
 
-  <h2>Register</h2>
-  <form id="register">
+    <div class="forms-row">
+      <div class="form-card">
+        <h2>Register</h2>
+        <form id="register">
+          <label for="reg-FirstName">First Name</label>
+          <input type="text" id="reg-FirstName" name="FirstName" required>
 
-    <label for="reg-FirstName">FirstName</label>
-    <input type="text" id="reg-FirstName" name="FirstName" required><br><br>
+          <label for="reg-LastName">Last Name</label>
+          <input type="text" id="reg-LastName" name="LastName" required>
 
-    <label for="reg-LastName">LastName</label>
-    <input type="text" id="reg-LastName" name="LastName" required><br><br>
+          <label for="reg-Email">Email</label>
+          <input type="email" id="reg-Email" name="Email" required>
 
-    <label for="reg-Email">Email</label>
-    <input type="email" id="reg-Email" name="Email" required><br><br>
+          <label for="reg-Password">Password</label>
+          <input type="password" id="reg-Password" name="Password" required>
 
-    <label for="reg-Password">Password</label>
-    <input type="password" id="reg-Password" name="Password" required><br><br>
+          <button type="submit">Register</button>
+        </form>
+      </div>
 
-    <button type="submit">Register</button>
+      <div class="form-card">
+        <h2>Login</h2>
+        <form id="Login">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="Email" required>
 
-  </form>
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="Password" required>
 
-  <h2>Login</h2>
-  <form id="Login">
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </div>
 
-    <input type="email" id="login-email" name="Email" required><br><br>
-    <input type="password" id="login-password" name="Password" required><br><br>
+    <div class="actions">
+      <button id="btn-profile" type="button">Get Profile</button>
+      <button id="btn-users" type="button">Get Users</button>
+    </div>
 
-    <button type="submit">Login</button>
-
-  </form>
-
-  <button id="btn-profile" type="button">Get Profile</button>
-  <button id="btn-users" type="button">Get Users</button>
-
-  <pre id="result"></pre>
+    <pre id="result"></pre>
+  </div>
 
   <script>
     const resultBox = document.getElementById('result');
@@ -69,10 +166,12 @@
       const res = await fetch(url, options);
       let data;
       try {
-         data = await res.json();
-         } catch { data = await res.text(); }
-      if (!res.ok) 
-      throw new Error(typeof data === 'string' ? data : JSON.stringify(data));
+        data = await res.json();
+      } catch {
+        data = await res.text();
+      }
+      if (!res.ok)
+        throw new Error(typeof data === 'string' ? data : JSON.stringify(data));
       return data;
     }
 
